@@ -7,7 +7,7 @@ use App\Models\OrderItem;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Session;
+use Illuminate\Support\Facades\Session;
 
 class CheckoutController extends Controller
 {
@@ -68,7 +68,12 @@ class CheckoutController extends Controller
     public function updateCart(Request $request)
     {
         if($request->id && $request->quantity) {
-            $cart = session()->get('cart');
+            $cart = session()->get('cart', []);
+            
+            if (!isset($cart[$request->id])) {
+                session()->flash('error', 'Item not found in cart');
+                return redirect()->back();
+            }
             
             // Validate Stock before updating
             $product = Product::find($request->id);
@@ -96,12 +101,14 @@ class CheckoutController extends Controller
     public function removeFromCart(Request $request)
     {
         if($request->id) {
-            $cart = session()->get('cart');
+            $cart = session()->get('cart', []);
             if(isset($cart[$request->id])) {
                 unset($cart[$request->id]);
                 session()->put('cart', $cart);
+                session()->flash('success', 'Item removed successfully');
+            } else {
+                session()->flash('error', 'Item not found in cart');
             }
-            session()->flash('success', 'Item removed successfully');
         }
         return redirect()->back();
     }

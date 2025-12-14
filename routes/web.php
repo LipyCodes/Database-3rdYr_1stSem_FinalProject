@@ -6,9 +6,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RegisterController;
 
-
-Route::get('/register', [RegisterController::class, 'showRegister'])->name('register');
-Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,7 +23,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Customer Routes (Protected)
-    Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/add-to-cart', [CheckoutController::class, 'addToCart'])->name('checkout.add');
     Route::post('/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
@@ -36,7 +33,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
 // Protect these routes with BOTH 'auth' (must be logged in) AND 'admin' (must be admin)
-    Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::post('/admin/restock/{id}', [AdminController::class, 'restock'])->name('admin.restock');
     Route::get('/admin/sales', [AdminController::class, 'salesReport'])->name('admin.sales');

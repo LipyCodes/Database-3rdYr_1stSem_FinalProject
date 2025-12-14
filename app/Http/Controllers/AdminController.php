@@ -34,8 +34,8 @@ class AdminController extends Controller
         $products->appends($request->all()); // Keeps search params in URL
         $categories = Category::all();
 
-        // Pointing to 'admin.admin' view (admin/admin.blade.php)
-        return view('admin.edit', compact('products', 'categories'));
+        // Pointing to 'admin.dashboard' view (admin/dashboard.blade.php)
+        return view('admin.dashboard', compact('products', 'categories'));
     }
 
     // CREATE (Show Form)
@@ -58,7 +58,6 @@ class AdminController extends Controller
 
         $product = new Product();
         $product->Name = $request->Name;
-        $product->save();
         $product->CategoryID = $request->CategoryID;
         $product->Price = $request->Price;
         $product->StockQuantity = $request->StockQuantity;
@@ -94,7 +93,6 @@ class AdminController extends Controller
 
         $product = Product::findOrFail($id);
         $product->Name = $request->Name;
-        $product->save();
         $product->CategoryID = $request->CategoryID;
         $product->Price = $request->Price;
         $product->StockQuantity = $request->StockQuantity;
